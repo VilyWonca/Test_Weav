@@ -24,3 +24,28 @@ class PDFParser:
         doc.close()
         return out
     
+    def chunk_text(self, text: str, max_length: int = 500, overlap:  int = 50) -> list[str]:
+        chunks = []
+        start = 0
+        while start < len(text):
+            chunk = text[start:start + max_length]
+            chunks.append(chunk)
+            start += max_length - overlap
+        return chunks
+    
+    def parse_and_chunk(self, max_length: int = 500, overlap:  int = 50) -> list[str]:
+        list_text = self.extract_text()
+
+        if not list_text:
+            return []
+
+        text = " ".join(list_text)
+        clean_text = self.clean_text(text)
+        chunks = self.chunk_text(clean_text, max_length=max_length, overlap=overlap)
+        return chunks
+
+        
+
+            
+
+    
