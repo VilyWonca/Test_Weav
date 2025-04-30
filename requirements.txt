@@ -2,4 +2,7 @@
 weaviate
 weaviate-client
 pymupdf
+ollama
+python-dotenv
+openai
 streamlit
