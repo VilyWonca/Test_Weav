@@ -1,6 +1,6 @@
 from services.embedder import Embedder
 from services.pdf_parser import PDFParser
-from services.weaviate_uploader import WeaviateUploader
+from services.wv_uploader import WeaviateUploader
 
 def main():
     parser = PDFParser(file_name= "books/Базы данных. Практикум ... С.В. Калиниченко.pdf")
