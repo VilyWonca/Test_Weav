@@ -1,51 +1,58 @@
 import pymupdf
+import os
 
 
 class PDFParser:
-    def __init__(self, file_name: str):
-        self.file_name = file_name
+    def __init__(self, folder_path: str):
+        self.folder_path = folder_path
     
+    def get_pdf_files(self) -> list[str]:
+
+        result = [os.path.join(self.folder_path, file)
+                  for file in os.listdir(self.folder_path)
+                  if file.lower().endswith(".pdf")]
+        
+        return result
+
+
     def clean_text(self, text: str) -> str:
         text = text.replace('\n', '').replace('\r', '').replace('\t', '').replace('\xa0', '')
         return text
 
-    def extract_text(self) -> list[str]:
+    def extract_text(self, file_name: str) -> list[dict]:
         try:
-            doc = pymupdf.open(self.file_name)
-            
+            doc = pymupdf.open(file_name)  
         except Exception as e:
             print(f"Возникла ошибка при открытии файла: {e}")
             return []
+        
         out = []
-        for page in doc:
+
+        for page_num, page in enumerate(doc, start=1):
             text = page.get_text()
             clear_text = self.clean_text(text)
-            out.append(clear_text)
+            out.append({
+                "text": clear_text,
+                "page_num": page_num
+            })
         doc.close()
         return out
     
-    def chunk_text(self, text: str, max_length: int = 500, overlap:  int = 50) -> list[str]:
-        chunks = []
-        start = 0
-        while start < len(text):
-            chunk = text[start:start + max_length]
-            chunks.append(chunk)
-            start += max_length - overlap
-        return chunks
-    
-    def parse_and_chunk(self, max_length: int = 500, overlap:  int = 50) -> list[str]:
-        list_text = self.extract_text()
+    def parse_and_chunk(self, file_path: str, max_length: int = 500, overlap:  int = 50) -> list[str]:
 
-        if not list_text:
+        list_dict = self.extract_text(file_name=file_path)
+        if not list_dict:
             return []
-
-        text = " ".join(list_text)
-        clean_text = self.clean_text(text)
-        chunks = self.chunk_text(clean_text, max_length=max_length, overlap=overlap)
-        return chunks
-
         
+        chunks = []
+        for i in list_dict:
+            start = 0
+            while start < len(i["text"]):
+                chunk = i["text"][start:start + max_length]
+                chunks.append({
+                        "text": chunk,
+                        "page_num": i["page_num"]
+                    })
+                start += max_length - overlap
 
-            
-
-    
+        return chunks

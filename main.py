@@ -1,28 +1,41 @@
 from services.embedder import Embedder
 from services.pdf_parser import PDFParser
 from services.wv_uploader import WeaviateUploader
+import os
 
 def main():
-    parser = PDFParser(file_name= "books/Базы данных. Практикум ... С.В. Калиниченко.pdf")
+    parser = PDFParser(folder_path= "books/")
     embedder = Embedder(model_name= "nomic-embed-text:latest")
     uploader = WeaviateUploader(collection_name= "Books")
 
-    chunks = parser.parse_and_chunk(max_length=500, overlap=50)
+    list_pdf = parser.get_pdf_files()
+    
+    for file_path in list_pdf:
+        chunks_dict = parser.parse_and_chunk(file_path, max_length=500, overlap=50)
+        name_file = os.path.basename(file_path)
 
-    embeddings = embedder.embed_text(chunks)
+        name_book = str(name_file.split("...")[0].strip())
+        name_author = str(name_file.split("...")[1].replace(".pdf ", "").strip())
 
-    uploader.create_collection()
+        list_chunks = []
 
-    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings), start=1):
+        for chunk in chunks_dict:
+            list_chunks.append(chunk["text"])
+
+        embeddings = embedder.embed_text(list_chunks)
+        uploader.create_collection()
+        for i, (page, chunk, embedding) in enumerate(zip(chunks_dict, list_chunks, embeddings)):
             uploader.upload_chunk(
-                name_book="Базы данных. Практикум",
-                author="С.В. Калиниченко",
+                name_book= name_book,
+                author= name_author,
                 text=chunk,
-                page=i,
+                page=page["page_num"],
                 embedding=embedding
             )
+        print(f"Загрузка текста из книги: {name_file} окончена. Переходим к следующей.")
 
-    print("Все данные загружены")
+    
+    print(f"Загрузка текста из ПОСЛЕДНЕЙ книги окончена. Закрываем соединение.")
     uploader.close()
 
 if __name__ == "__main__":

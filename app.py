@@ -32,11 +32,9 @@ if prompt := st.chat_input("What is up?"):
 
     with st.chat_message("assistant"):
         print("Извлекаем чанки...")
-        chunks = searcher_wv.search(prompt, 2, "Books")
-        print("ВОТ ЧАНКИ", chunks)
-        print("А ВОТ КАКОГО ОНИ ТИПА", type(chunks), type(chunks[0]))
+        chunks_dict = searcher_wv.search(prompt, 2, "Books")
         print("Строим в промпт...")
-        context_prompt = prompt_builder.build_prompt(chunks, prompt)
+        context_prompt = prompt_builder.build_prompt(chunks_dict, prompt)
         print("Вот конечный промпт:", context_prompt)
         print("Передаем в модель...")
         st.session_state.messages.append({"role": "user", "content": context_prompt})
