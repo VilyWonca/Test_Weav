@@ -6,3 +6,5 @@ ollama
 python-dotenv
 openai
 streamlit
+sentence_transformers
+nltk

@@ -11,7 +11,7 @@ def main():
     list_pdf = parser.get_pdf_files()
     
     for file_path in list_pdf:
-        chunks_dict = parser.parse_and_chunk(file_path, max_length=500, overlap=50)
+        chunks_dict = parser.parse_and_chunk(file_path, max_tokens=500)
         name_file = os.path.basename(file_path)
 
         name_book = str(name_file.split("...")[0].strip())
