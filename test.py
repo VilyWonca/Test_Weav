@@ -1,5 +1,5 @@
-from services.pdf_parser import PDFParser
+from services.wv_search import WeaviateSearcher
 
-parser = PDFParser("books/")
+parser = WeaviateSearcher()
 
-print(parser.get_pdf_files())
+print(parser.search("Что такое драйвер?", 2, "Books"))

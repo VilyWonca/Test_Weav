@@ -19,6 +19,13 @@ client = OpenAI()
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
 
+search_type = st.selectbox(
+    "🔍 Выберите тип поиска:",
+    ["По ключевым словам", "По вектору (семантический)", "Гибридный поиск"]
+) 
+
+print("Вот такой тип поиска выбрал пользователь:", search_type)
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -32,7 +39,7 @@ if prompt := st.chat_input("What is up?"):
 
     with st.chat_message("assistant"):
         print("Извлекаем чанки...")
-        chunks_dict = searcher_wv.search(prompt, 10, "Books")
+        chunks_dict = searcher_wv.search(prompt, 10, "Books", search_type)
 
         print("Строим промпт...")
         context_prompt = prompt_builder.build_prompt(chunks_dict, prompt)
