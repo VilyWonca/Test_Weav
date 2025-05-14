@@ -1,5 +1,10 @@
-from services.wv_search import WeaviateSearcher
+import pymupdf4llm
 
-parser = WeaviateSearcher()
+"""Надо разобраться как можно переводить не pdf, а текст старицы в формат маркдовн"""
 
-print(parser.search("Что такое драйвер?", 2, "Books"))
+result = pymupdf4llm.to_markdown("input.pdf")
+
+with open('spamspam.txt', 'w', encoding="utf-8") as f:
+    f.write(str(result))
+
+print("Результат сохранен в текст")

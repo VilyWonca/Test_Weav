@@ -1,8 +1,10 @@
 import pymupdf
+import pymupdf4llm
 import os
 from sentence_transformers import SentenceTransformer, util
 import nltk
 import numpy as np
+from markitdown import MarkItDown
 
 
 class PDFParser:
@@ -23,7 +25,7 @@ class PDFParser:
 
 
     def clean_text(self, text: str) -> str:
-        text = text.replace('\n', ' ').replace('\r', '').replace('\t', '').replace('\xa0', '')
+        text = text.replace('\n', ' ').replace('\r', '').replace('\t', '').replace('\xa0', '').replace('\xa0', '')
         return text
 
     def extract_text(self, file_name: str) -> list[dict]:
