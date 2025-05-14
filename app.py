@@ -42,7 +42,8 @@ if prompt := st.chat_input("What is up?"):
         chunks_dict = searcher_wv.search(prompt, 10, "Books", search_type)
 
         print("Строим промпт...")
-        context_prompt = prompt_builder.build_prompt(chunks_dict, prompt)
+        context_chunk = prompt_builder.build_prompt(chunks_dict, prompt)[1]
+        context_prompt = prompt_builder.build_prompt(chunks_dict, prompt)[0]
         print("Вот конечный промпт:", context_prompt)
 
         # Добавляем настоящий пользовательский запрос
@@ -63,8 +64,13 @@ if prompt := st.chat_input("What is up?"):
                 if chunk.__class__.__name__ == "ResponseTextDeltaEvent":
                     yield chunk.delta
 
-        # Выводим ответ и сохраняем его
+        st.markdown("**Ответ от нейросети:**")
         response = st.write_stream(extract_text_from_stream(stream))
-        print("Вот сам ответ от ллм", response)
+        with st.expander("**Отрывки текста, которые использовались при ответе:**"):
+            st.markdown(
+            f"""
+            <div style= "background-color:#1A1C23; padding: 25px; border-radius: 16px;">{context_chunk}</div>
+            """,
+            unsafe_allow_html=True
+            )
 
-    st.session_state.messages.append({"role": "assistant", "content": response})

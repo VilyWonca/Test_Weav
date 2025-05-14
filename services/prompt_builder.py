@@ -5,10 +5,10 @@ class PromptBuild():
 
     def build_prompt(self, chunks_dict: list[dict], query: str):
         context_blocks = "\n".join(
-                f"""Чанк: {chunk_data["text"]}
-            Автор: {chunk_data["author"]}
-            Название книги: {chunk_data["name_book"]}
-            Страница книги: {chunk_data["page"]}\n"""
+                f"""📘**Чанк:** {chunk_data["text"]} \n
+✍️ **Автор:** {chunk_data["author"]}\n
+📖 **Название книги:** {chunk_data["name_book"]}\n
+🔢 **Страница книги:**  {chunk_data["page"]}\n"""
                 for chunk_data in chunks_dict
             )
         prompt = f"""Ты — интеллектуальный ассистент.  
@@ -35,4 +35,4 @@ class PromptBuild():
 
                     Ответ:
                     """
-        return prompt
+        return [prompt, context_blocks]
