@@ -1,23 +1,13 @@
 import os
-from openai import OpenAI
+from ollama import chat
 import streamlit as st
-from dotenv import load_dotenv
 from services.prompt_builder import PromptBuild
 from services.wv_search import WeaviateSearcher
 
 prompt_builder = PromptBuild()
 searcher_wv = WeaviateSearcher()
 
-load_dotenv()
-
-api_key = os.getenv("OPENAI_API_KEY")
-
 st.title("S_MAKE")
-
-client = OpenAI()
-
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
 
 search_type = st.selectbox(
     "🔍 Выберите тип поиска:",
@@ -50,12 +40,9 @@ if prompt := st.chat_input("What is up?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
 
         print("Передаем в модель...")
-        stream = client.responses.create(
-            model=st.session_state["openai_model"],
-            input=[
-                {"role": m["role"], "content": context_prompt}
-                for m in st.session_state.messages
-            ],
+        stream = chat(
+            model='llama3.2',
+            messages=[{'role': 'user', 'content': prompt}],
             stream=True,
         )
 

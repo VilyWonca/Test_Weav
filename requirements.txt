@@ -5,7 +5,6 @@ pymupdf
 pymupdf4llm
 ollama
 python-dotenv
-openai
 streamlit
 sentence_transformers
 nltk
