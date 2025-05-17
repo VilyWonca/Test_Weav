@@ -10,4 +10,3 @@ streamlit
 sentence_transformers
 nltk
 markitdown
-markitdown[all]
