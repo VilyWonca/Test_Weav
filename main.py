@@ -5,7 +5,7 @@ import os
 
 def main():
     parser = PDFParser(folder_path= "books/")
-    embedder = Embedder(model_name= "nomic-embed-text:latest")
+    embedder = Embedder(model_name= "text-embedding-3-small")
     uploader = WeaviateUploader(collection_name= "Books")
 
     list_pdf = parser.get_pdf_files()

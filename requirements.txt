@@ -3,10 +3,10 @@ weaviate
 weaviate-client
 pymupdf
 pymupdf4llm
-ollama
 python-dotenv
 openai
 streamlit
 sentence_transformers
 nltk
 markitdown
+python-dotenv

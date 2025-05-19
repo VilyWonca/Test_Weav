@@ -1,4 +1,3 @@
-import os
 from openai import OpenAI
 import streamlit as st
 from dotenv import load_dotenv
@@ -9,8 +8,6 @@ prompt_builder = PromptBuild()
 searcher_wv = WeaviateSearcher()
 
 load_dotenv()
-
-api_key = os.getenv("OPENAI_API_KEY")
 
 st.title("S_MAKE")
 
