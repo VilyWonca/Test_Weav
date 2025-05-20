@@ -2,7 +2,7 @@ import pymupdf4llm
 
 """Надо разобраться как можно переводить не pdf, а текст старицы в формат маркдовн"""
 
-result = pymupdf4llm.to_markdown("input.pdf")
+result = pymupdf4llm.to_markdown("books/Технология разработки программного обеспечения. Учебное пособие ... В.А. Лохвицкий.pdf")
 
 with open('spamspam.txt', 'w', encoding="utf-8") as f:
     f.write(str(result))

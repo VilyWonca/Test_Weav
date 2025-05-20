@@ -12,9 +12,7 @@ class PDFParser:
         self.folder_path = folder_path
         nltk.download('punkt', quiet=True)
         nltk.download('punkt_tab', quiet=True)
-        self.model = SentenceTransformer(model_name
-                                         
-                                         )
+        self.model = SentenceTransformer(model_name)
     def get_pdf_files(self) -> list[str]:
 
         result = [os.path.join(self.folder_path, file)
@@ -25,7 +23,7 @@ class PDFParser:
 
 
     def clean_text(self, text: str) -> str:
-        text = text.replace('\n', ' ').replace('\r', '').replace('\t', '').replace('\xa0', '').replace('\xa0', '')
+        text = text.replace('\n', ' ').replace('\r', '').replace('\t', '').replace('\xa0', '').replace('\xa0', '').replace('- ', '')
         return text
 
     def extract_text(self, file_name: str) -> list[dict]:
@@ -38,7 +36,7 @@ class PDFParser:
         out = []
 
         for page_num, page in enumerate(doc, start=1):
-            text = page.get_text()
+            markdown_text = pymupdf4llm.to_markdown("books/file.pdf", pages=[0, 1, 2])
             clear_text = self.clean_text(text)
             out.append({
                 "text": clear_text,
