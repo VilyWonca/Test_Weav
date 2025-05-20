@@ -35,13 +35,18 @@ class PDFParser:
         
         out = []
 
-        for page_num, page in enumerate(doc, start=1):
-            markdown_text = pymupdf4llm.to_markdown("books/file.pdf", pages=[0, 1, 2])
-            clear_text = self.clean_text(text)
+        for page_num in range(len(doc)):
+            markdown = pymupdf4llm.to_markdown(
+                doc,                 
+                pages=[page_num], 
+            )
+            # если нужно — почистить текст
+            clean = self.clean_text(markdown)  # твоя функция очистки
             out.append({
-                "text": clear_text,
-                "page_num": page_num
+                "text": clean,
+                "page_num": page_num + 1
             })
+
         doc.close()
         return out
     
