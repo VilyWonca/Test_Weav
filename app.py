@@ -1,13 +1,16 @@
 from openai import OpenAI
 import streamlit as st
+import os
 from dotenv import load_dotenv
 from services.prompt_builder import PromptBuild
 from services.wv_search import WeaviateSearcher
 
+load_dotenv()
+
+os.environ["NO_PROXY"] = "localhost,127.0.0.1"
+
 prompt_builder = PromptBuild()
 searcher_wv = WeaviateSearcher()
-
-load_dotenv()
 
 st.title("S_MAKE")
 

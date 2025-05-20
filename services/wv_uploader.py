@@ -16,21 +16,19 @@ class WeaviateUploader:
             return
        
        self.client.collections.create(
-            name= f"{self.collection_name}",
+            name= self.collection_name,
             properties=[
                 Property(name="name_book", data_type=DataType.TEXT),
                 Property(name="text", data_type=DataType.TEXT),
                 Property(name="author", data_type=DataType.TEXT),
                 Property(name="page", data_type=DataType.INT)
             ],
-            vectorizer_config=Configure.Vectorizer.text2vec_ollama(
-                api_endpoint="http://host.docker.internal:11434",       
-                model="nomic-embed-text",                              
+            vectorizer_config=Configure.Vectorizer.text2vec_openai(
+                model="text-embedding-3-small"
             ),
-            generative_config=Configure.Generative.ollama(             
-                api_endpoint="http://host.docker.internal:11434",       
-                model="owl/t-lite:latest",                                       
-            )
+            generative_config=Configure.Generative.openai(
+                model="gpt-3.5-turbo"
+            )                                      
         )
 
     def upload_chunk(self, name_book: str, author: str, text: str, page: int, embedding: list[float]):

@@ -11,4 +11,4 @@ response = client.embeddings.create(
   encoding_format="float"
 )
 
-print(response.data[0].embedding[0])
+print(response.data[0].embedding)
